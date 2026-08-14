@@ -1,4 +1,4 @@
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/home/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 export default function SiteLayout({

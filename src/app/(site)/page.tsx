@@ -1,14 +1,14 @@
-import Hero from "../../components/Hero";
-import ContactPage from "../../components/ContectSection";
-import ContactInfoSection from "../../components/ContactInfoSection";
-import GoalSection from "../../components/GoalSection";
-import MapSection from "../../components/MapSection";
-import FAQSection from "../../components/FAQSection";
-import TestimonialSection from "../../components/TestimonialSection";
-import StatsSection from "../../components/StatsSection";
-import AwardsSection from "../../components/AwardsSection";
-import BrandAuditSection from "../../components/BrandAuditSection";
-import CTASection from "../../components/CTASection";
+import Hero from "../../components/home/Hero";
+import ContactPage from "../../components/home/ContectSection";
+import ContactInfoSection from "../../components/home/ContactInfoSection";
+import GoalSection from "../../components/home/GoalSection";
+import MapSection from "../../components/home/MapSection";
+import FAQSection from "../../components/home/FAQSection";
+import TestimonialSection from "../../components/home/TestimonialSection";
+import StatsSection from "../../components/home/StatsSection";
+import AwardsSection from "../../components/home/AwardsSection";
+import BrandAuditSection from "../../components/home/BrandAuditSection";
+import CTASection from "../../components/home/CTASection";
 
 export default function Home() {
   return (

@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users } from "lucide-react";
+import { LayoutDashboard, Users, Receipt, ShoppingBag } from "lucide-react";
 
 const navItems = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Leads", href: "/dashboard/leads", icon: Users },
+  { label: "Products", href: "/dashboard/products", icon: ShoppingBag },
+  { label: "Orders", href: "/dashboard/orders", icon: Receipt },
 ];
 
 export default function Sidebar() {
@@ -28,11 +30,10 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                active
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${active
                   ? "border border-[#D49A34]/30 bg-[#D49A34]/15 text-[#D49A34]"
                   : "text-gray-400 hover:bg-white/5 hover:text-white"
-              }`}
+                }`}
             >
               <Icon size={18} />
               {label}

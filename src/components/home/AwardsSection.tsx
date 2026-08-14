@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AwardsCard from "./AwardsCard";
-import { awards } from "../data/awards";
+import { awards } from "../../data/awards";
 
 export default function AwardsSection() {
   const [current, setCurrent] = useState(0);

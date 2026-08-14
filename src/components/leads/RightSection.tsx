@@ -53,7 +53,7 @@ export default function RightSection() {
 
       <div className="relative h-full min-h-[480px]">
         <Image
-          src="/goal.jpg"
+          src="/leads/goal.jpg"
           alt="Goal"
           fill
           className="object-cover"

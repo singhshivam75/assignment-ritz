@@ -8,7 +8,7 @@ export default function FooterLeft() {
       {/* Logo */}
 
       <Image
-        src="/logo.png"
+        src="/leads/logo.png"
         alt="Ritz Media World"
         width={150}
         height={150}

@@ -79,7 +79,7 @@ export default function ContactSection() {
 
                     <div className="relative aspect-square w-full max-w-[650px] overflow-hidden rounded-full">
                         <Image
-                            src="/office.jpg"
+                            src="/leads/office.jpg"
                             alt="Office"
                             fill
                             className="object-cover"

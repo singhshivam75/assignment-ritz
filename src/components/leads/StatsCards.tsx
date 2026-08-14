@@ -58,7 +58,7 @@ export default function StatsCards() {
                         <div className="text-center">
 
                             <Image
-                                src="/google-rating.png"
+                                src="/leads/google-rating.png"
                                 alt="Google"
                                 width={220}
                                 height={120}

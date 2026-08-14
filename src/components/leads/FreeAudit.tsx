@@ -36,7 +36,7 @@ export default function FreeAudit() {
       </button>
 
       <Image
-        src="/audit.png"
+        src="/leads/audit.png"
         alt="Audit"
         width={290}
         height={290}

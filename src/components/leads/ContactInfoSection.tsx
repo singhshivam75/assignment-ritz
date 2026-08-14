@@ -28,7 +28,7 @@ export default function ContactInfoSection() {
                             {/* Team Image */}
                             <div className="relative w-[220px]">
                                 <Image
-                                    src="/team.jpg"
+                                    src="/leads/team.jpg"
                                     alt="Team"
                                     fill
                                     className="object-cover"
@@ -76,7 +76,7 @@ export default function ContactInfoSection() {
                         <div className="relative w-[320px]">
 
                             <Image
-                                src="/building.jpg"
+                                src="/leads/building.jpg"
                                 alt="Building"
                                 fill
                                 className="object-cover"
@@ -90,7 +90,7 @@ export default function ContactInfoSection() {
 
                             <div className="mb-30">
                                 <Image
-                                    src="/logo.png"
+                                    src="/leads/logo.png"
                                     alt="Logo"
                                     width={120}
                                     height={120}

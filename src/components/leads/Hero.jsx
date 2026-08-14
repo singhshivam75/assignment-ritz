@@ -3,7 +3,7 @@ export default function Hero() {
     <section
       className="relative h-[550px] bg-cover bg-center"
       style={{
-        backgroundImage: "url('/contact-banner.jpg')",
+        backgroundImage: "url('/leads/contact-banner.jpg')",
       }}
     >
       {/* Overlay */}

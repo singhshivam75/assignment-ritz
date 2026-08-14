@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 const logos = [
-  "/logos/sikka.png",
-  "/logos/sikka.png",
-  "/logos/sikka.png",
-  "/logos/sikka.png",
-  "/logos/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
 ];
 
 export default function BrandLogos() {
@@ -30,11 +30,11 @@ export default function BrandLogos() {
 
       <div className="flex flex-1 items-center justify-between">
 
-        {logos.map((logo) => (
+        {logos.map((logo, index) => (
           <Image
-            key={logo}
+            key={`${logo}-${index}`}
             src={logo}
-            alt="logo"
+            alt="Brand logo"
             width={160}
             height={85}
             className="object-contain"

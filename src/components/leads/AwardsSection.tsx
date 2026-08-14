@@ -24,7 +24,7 @@ export default function AwardsSection() {
     <section
       className="relative overflow-hidden bg-[#11152F] py-24 text-white"
       style={{
-        backgroundImage: "url('/awards-bg.png')",
+        backgroundImage: "url('/leads/awards-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

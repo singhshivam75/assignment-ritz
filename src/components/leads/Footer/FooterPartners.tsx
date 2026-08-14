@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const partners = [
-  "/logos/sikka.png",
-  "/logos/sikka.png",
-  "/logos/sikka.png",
-  "/logos/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
+  "/leads/sikka.png",
 ];
 
 export default function FooterPartners() {

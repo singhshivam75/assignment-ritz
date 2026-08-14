@@ -17,7 +17,7 @@ export default function FooterRight() {
       <div className="flex items-center gap-3">
 
         <Image
-          src="/google-rating.png"
+          src="/leads/google-rating.png"
           alt="Google Rating"
           width={220}
           height={80}

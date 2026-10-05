@@ -22,6 +22,12 @@ export interface ProductsApiResponse {
   total: number;
   page: number;
   limit: number;
+  totalPages?: number;
+  message?: string;
+}
+
+export interface ProductCategoriesResponse {
+  categories: string[];
   message?: string;
 }
 

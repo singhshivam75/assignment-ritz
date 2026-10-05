@@ -21,9 +21,11 @@ export default function StatusRemarkCell({ lead, onUpdated }: StatusRemarkCellPr
   const [remark, setRemark] = useState(lead.remark ?? "");
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const save = async (nextStatus: QueryStatus, nextRemark: string) => {
     setSaving(true);
+    setError(null);
 
     try {
       const response = await fetch(`/api/leads/${lead.id}/status`, {
@@ -39,7 +41,7 @@ export default function StatusRemarkCell({ lead, onUpdated }: StatusRemarkCellPr
       onUpdated(lead.id, nextStatus, nextRemark);
       setDirty(false);
     } catch {
-      alert("Failed to update status/remark");
+      setError("Could not save. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -87,6 +89,7 @@ export default function StatusRemarkCell({ lead, onUpdated }: StatusRemarkCellPr
         )}
       </div>
 
+      {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
   );
 }

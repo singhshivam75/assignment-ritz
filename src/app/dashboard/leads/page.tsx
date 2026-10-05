@@ -99,7 +99,7 @@ export default function LeadsPage() {
         fetchLeads(sort, page, debouncedSearch, statusFilter);
       }
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to delete lead");
+      setError(err instanceof Error ? err.message : "Failed to delete lead");
     } finally {
       setDeletingId(null);
     }

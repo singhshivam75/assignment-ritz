@@ -1,10 +1,10 @@
 import React from "react";
 import { AlertCircle, RefreshCw, PackageX } from "lucide-react";
 
-export function ProductsSkeletonGrid() {
+export function ProductsSkeletonGrid({ count = 8 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {Array.from({ length: 8 }).map((_, idx) => (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: count }).map((_, idx) => (
         <div
           key={idx}
           className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm animate-pulse"

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Receipt, ShoppingBag } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LayoutDashboard, Users, Receipt, ShoppingBag, LogOut } from "lucide-react";
 
 const navItems = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -13,6 +13,13 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/dashboard/login");
+    router.refresh();
+  };
 
   return (
     <aside className="flex h-screen w-64 shrink-0 flex-col border-r border-white/10 bg-black text-white">
@@ -43,8 +50,16 @@ export default function Sidebar() {
 
       </nav>
 
-      <div className="border-t border-white/10 px-6 py-4 text-xs text-gray-500">
-        Admin Dashboard
+      <div className="border-t border-white/10 px-3 py-4">
+        <button
+          type="button"
+          onClick={() => void logout()}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 transition hover:bg-white/5 hover:text-white"
+        >
+          <LogOut size={18} />
+          Log out
+        </button>
+        <p className="mt-2 px-3 text-xs text-gray-500">Admin Dashboard</p>
       </div>
 
     </aside>

@@ -1,109 +1,78 @@
-Ritz Media World — a Next.js marketing site with a lead-capture contact form and an admin dashboard for managing submitted leads, backed by PostgreSQL.
+# Ritz Media World
 
-## Tech Stack
+Next.js marketing site with product catalog, Razorpay checkout, AI concierge (Gemini), and admin dashboard.
 
-- **Framework:** Next.js 16 (App Router, Turbopack)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 4
-- **Database:** PostgreSQL (via [`pg`](https://node-postgres.com/))
-- **Icons:** lucide-react, react-icons
+## Stack
 
-## Features
-
-- Public marketing site with a contact/lead form
-- Admin dashboard (`/dashboard`) with:
-  - Overview page showing lead counts by status
-  - Leads table with sorting (latest/oldest first) and pagination
-  - Full CRUD on leads (create, edit, delete)
-  - Inline editing of query status and remark
-
-## Prerequisites
-
-- Node.js 20+
-- A PostgreSQL database (local or hosted)
+- **Next.js 16** (App Router)
+- **PostgreSQL** (Neon) via `pg`
+- **Razorpay** payments
+- **Google Gemini** AI chat
 
 ## Setup
 
-1. Install dependencies:
+1. Copy environment variables:
 
-   ```bash
-   npm install
-   ```
+```bash
+cp .env.example .env
+```
 
-2. Create a `.env` file in the project root:
+2. Fill in `.env`:
 
-   ```bash
-   DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
-   ```
+| Variable | Purpose |
+|----------|---------|
+| `DATABASE_URL` | Postgres connection string |
+| `GEMINI_API_KEY` | Google AI Studio / Gemini API key |
+| `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Server-side Razorpay |
+| `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Client checkout |
+| `ADMIN_USERNAME` | Dashboard login (default `admin`) |
+| `ADMIN_PASSWORD` | Dashboard password (**required** for `/dashboard`) |
+| `ADMIN_SESSION_SECRET` | Cookie session value (use a long random string) |
 
-3. Create the database schema:
+3. Install and run:
 
-   ```sql
-   CREATE TABLE leads (
-     id SERIAL PRIMARY KEY,
-     name VARCHAR(255) NOT NULL,
-     email VARCHAR(255) NOT NULL,
-     phone VARCHAR(50) NOT NULL,
-     service VARCHAR(255) NOT NULL
-   );
+```bash
+npm install
+npm run dev
+```
 
-   CREATE TABLE lead_details (
-     id SERIAL PRIMARY KEY,
-     lead_id INTEGER NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
-     message TEXT,
-     query_status VARCHAR(20) NOT NULL DEFAULT 'Pending'
-       CHECK (query_status IN ('Pending', 'In Progress', 'Resolved', 'Closed')),
-     remark TEXT,
-     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-   );
+Open [http://localhost:3000](http://localhost:3000).
 
-   CREATE INDEX idx_lead_details_lead_id ON lead_details(lead_id);
-   ```
+## Routes
 
-4. Run the dev server:
+| Path | Description |
+|------|-------------|
+| `/` | Marketing homepage (dynamic stats & featured products, revalidate 60s) |
+| `/products` | Catalog with server pagination, search, filters |
+| `/products/[id]` | Product detail (SSR) + related products |
+| `/ai` | Gemini AI assistant |
+| `/checkout` | Checkout flow |
+| `/dashboard` | Admin (protected by middleware) |
+| `/dashboard/login` | Admin sign-in |
 
-   ```bash
-   npm run dev
-   ```
+## API (selection)
 
-   The site runs at [http://localhost:3000](http://localhost:3000), the dashboard at [http://localhost:3000/dashboard](http://localhost:3000/dashboard).
+- `GET /api/products` — Paginated products (`page`, `limit`, `search`, `category`, `sort`, `featured`)
+- `GET /api/products/categories` — Distinct categories
+- `POST /api/ai/chat` — AI chat (rate limited)
+- `POST /api/leads` — Contact form leads
+- `POST /api/auth/login` / `POST /api/auth/logout` — Dashboard session
 
 ## Scripts
 
-| Command         | Description                          |
-| --------------- | ------------------------------------ |
-| `npm run dev`   | Start the dev server (Turbopack)     |
-| `npm run build` | Build for production                 |
-| `npm run start` | Start the production server          |
-| `npm run lint`  | Run ESLint                           |
-
-## API Reference
-
-All routes live under `src/app/api/leads`.
-
-| Method | Route                     | Description                                  |
-| ------ | -------------------------- | --------------------------------------------- |
-| GET    | `/api/leads`               | List leads. Query params: `sort` (`latest`\|`oldest`), `page`, `limit` |
-| POST   | `/api/leads`               | Create a lead (`name`, `email`, `phone`, `service`, `message`) |
-| GET    | `/api/leads/:id`           | Get a single lead                              |
-| PUT    | `/api/leads/:id`           | Update a lead                                  |
-| DELETE | `/api/leads/:id`           | Delete a lead                                  |
-| PATCH  | `/api/leads/:id/status`    | Update `query_status` and `remark`             |
-
-## Production Notes
-
-- **Authentication:** the `/dashboard` routes and `/api/leads` endpoints are not currently protected by auth. Add an auth layer (e.g. middleware-based session check) before deploying publicly, since the API allows unauthenticated read/write/delete of all lead data.
-- **Database SSL:** `src/lib/db.js` connects with `ssl: { rejectUnauthorized: false }`, suitable for most managed Postgres providers (Supabase, Neon, RDS). Adjust if your provider requires strict certificate validation.
-- **Environment variables:** only `DATABASE_URL` is required. Never commit `.env` — it's already covered by `.gitignore`.
-
-## Deployment
-
-The app builds as a standard Next.js app and can be deployed to any Node-compatible host (Vercel, Render, Fly.io, etc.):
-
 ```bash
+npm run dev
 npm run build
 npm run start
+npm run lint
 ```
 
-Ensure `DATABASE_URL` is set in the deployment environment and points to a reachable, migrated PostgreSQL database.
+## CI
 
+GitHub Actions runs `lint` and `build` on push/PR (see `.github/workflows/ci.yml`).
+
+## Security notes
+
+- Never commit `.env` (already in `.gitignore`).
+- Set strong `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` before deploying.
+- Rotate any keys that were exposed in chat or screenshots.

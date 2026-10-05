@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../lib/db";
+import {
+  getProductOrderByClause,
+  parseProductSort,
+  PRODUCTS_PAGE_SIZE,
+} from "@/lib/products-query";
 
 export async function GET(req: NextRequest) {
   try {
-    const sort =
-      req.nextUrl.searchParams.get("sort") === "oldest"
-        ? "ASC"
-        : "DESC";
+    const sortParam = req.nextUrl.searchParams.get("sort");
+    const orderBy = getProductOrderByClause(parseProductSort(sortParam));
 
     const page = Math.max(
       1,
@@ -14,26 +17,30 @@ export async function GET(req: NextRequest) {
     );
 
     const limit = Math.min(
-      100,
-      Math.max(1, Number(req.nextUrl.searchParams.get("limit")) || 10)
+      48,
+      Math.max(
+        1,
+        Number(req.nextUrl.searchParams.get("limit")) || PRODUCTS_PAGE_SIZE
+      )
     );
 
     const offset = (page - 1) * limit;
 
     const search = req.nextUrl.searchParams.get("search")?.trim() ?? "";
-    const category = req.nextUrl.searchParams.get("category") ?? "";
+    const category = req.nextUrl.searchParams.get("category")?.trim() ?? "";
     const active = req.nextUrl.searchParams.get("active");
+    const featured = req.nextUrl.searchParams.get("featured");
 
     const conditions: string[] = [];
     const values: unknown[] = [];
 
     if (search) {
       values.push(`%${search}%`);
-
       conditions.push(`
         (
           title ILIKE $${values.length}
           OR short_description ILIKE $${values.length}
+          OR COALESCE(description, '') ILIKE $${values.length}
         )
       `);
     }
@@ -46,6 +53,10 @@ export async function GET(req: NextRequest) {
     if (active === "true" || active === "false") {
       values.push(active === "true");
       conditions.push(`is_active = $${values.length}`);
+    }
+
+    if (featured === "true") {
+      conditions.push("is_featured = true");
     }
 
     const whereClause = conditions.length
@@ -63,7 +74,7 @@ export async function GET(req: NextRequest) {
       COUNT(*) OVER()::int AS total_count
       FROM products
       ${whereClause}
-      ORDER BY created_at ${sort}
+      ORDER BY ${orderBy}
       LIMIT $${limitParam}
       OFFSET $${offsetParam}
       `,
@@ -73,7 +84,8 @@ export async function GET(req: NextRequest) {
     const total = rows[0]?.total_count ?? 0;
 
     const products = rows.map(
-      ({ total_count, ...rest }: { total_count: number; [key: string]: unknown }) => rest
+      ({ total_count, ...rest }: { total_count: number; [key: string]: unknown }) =>
+        rest
     );
 
     return NextResponse.json({
@@ -81,8 +93,10 @@ export async function GET(req: NextRequest) {
       total,
       page,
       limit,
+      totalPages: Math.max(1, Math.ceil(total / limit)),
     });
   } catch (error) {
+    console.error("Products fetch error:", error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }

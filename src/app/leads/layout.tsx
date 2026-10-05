@@ -1,16 +1,7 @@
-import Navbar from "../../components/leads/Navbar";
-import Footer from "../../components/leads/Footer/Footer";
-
-export default function SiteLayout({
+export default function LegacyLeadsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Navbar />
-      {children}
-      <Footer />
-    </>
-  );
+  return children;
 }

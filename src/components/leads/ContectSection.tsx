@@ -21,6 +21,10 @@ export default function ContactSection() {
     });
 
     const [loading, setLoading] = useState(false);
+    const [formStatus, setFormStatus] = useState<{
+        type: "success" | "error";
+        message: string;
+    } | null>(null);
 
     const handleChange = (
         e: React.ChangeEvent<
@@ -37,6 +41,7 @@ export default function ContactSection() {
         e.preventDefault();
 
         setLoading(true);
+        setFormStatus(null);
 
         try {
             const response = await fetch("/api/leads", {
@@ -50,10 +55,13 @@ export default function ContactSection() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message);
+                throw new Error(data.message || "Submission failed");
             }
 
-            alert("Lead submitted successfully.");
+            setFormStatus({
+                type: "success",
+                message: "Thank you! Our team will contact you shortly.",
+            });
 
             setFormData({
                 name: "",
@@ -63,14 +71,20 @@ export default function ContactSection() {
                 message: "",
             });
         } catch (error) {
-            alert("Something went wrong");
+            setFormStatus({
+                type: "error",
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Something went wrong. Please try again.",
+            });
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <section className="bg-white py-12">
+        <section id="contact" className="bg-white py-12 scroll-mt-24">
             <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 lg:grid-cols-2">
 
                 {/* Left */}
@@ -124,6 +138,18 @@ export default function ContactSection() {
                         onSubmit={handleSubmit}
                         className="space-y-4"
                     >
+                        {formStatus && (
+                            <div
+                                className={`rounded-xl px-4 py-3 text-sm ${
+                                    formStatus.type === "success"
+                                        ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                                        : "bg-red-50 text-red-700 border border-red-200"
+                                }`}
+                                role="status"
+                            >
+                                {formStatus.message}
+                            </div>
+                        )}
                         <input
                             name="name"
                             required
